@@ -72,3 +72,15 @@ output "rds_instance_endpoint" {
 output "rds_instance_id" {
   value = module.rds.rds_instance_id
 }
+
+module "alb" {
+  source                 = "./modules/load-balancer"
+  region                 = "us-west-2"
+  alb_name               = "awsLoadBalancerTerraform"
+  target_type            = "ip"
+  alb_security_group_ids = [aws_security_group.allow_ssh.id]
+  subnet_ids             = var.subnet_ids
+  target_group_name      = "tg-terraform"
+  target_group_port      = 80
+  vpc_id                 = var.vpc_id
+}
